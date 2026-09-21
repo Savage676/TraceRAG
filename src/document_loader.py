@@ -9,7 +9,7 @@ def count_pdf_pages(pdf_bytes: bytes) -> int:
     document.close()
     return page_count
 
-def extract_page_pages(pdf_bytes: bytes,file_name: str) -> list[dict]:
+def extract_pdf_pages(pdf_bytes: bytes,file_name: str) -> list[dict]:
     document = pymupdf.open(
         stream=pdf_bytes,
         filetype="pdf",
@@ -17,7 +17,10 @@ def extract_page_pages(pdf_bytes: bytes,file_name: str) -> list[dict]:
 
     pages = []
     for page_index,page in enumerate(document):
-        text = page.get_text("text")
+        text = page.get_text("text").strip()
+
+        if not text:
+            continue
 
         page_data = {
             "text": text,
